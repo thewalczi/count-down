@@ -1,0 +1,35 @@
+{
+  "name": "count-down",
+  "version": "1.0.0",
+  "description": "Simple count-down app",
+  "main": "index.js",
+  "scripts": {
+    "start": "webpack-dev-server --open --mode development",
+    "build": "webpack --mode production"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/thewalczi/count-down.git"
+  },
+  "keywords": [
+    "count-down",
+    "app"
+  ],
+  "author": "walczi",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/thewalczi/count-down/issues"
+  },
+  "homepage": "https://github.com/thewalczi/count-down#readme",
+  "devDependencies": {
+    "@babel/core": "^7.2.0",
+    "@babel/preset-env": "^7.2.0",
+    "@babel/preset-react": "^7.0.0",
+    "babel-loader": "^8.0.4",
+    "react": "^16.6.3",
+    "react-dom": "^16.6.3",
+    "webpack": "^4.27.1",
+    "webpack-cli": "^3.1.2",
+    "webpack-dev-server": "^3.1.10"
+  }
+}
