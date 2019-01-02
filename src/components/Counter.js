@@ -4,58 +4,75 @@ import TimeUnit from "./TimeUnit";
 // import ActionButton from "./ActionButton";
 import style from "../css/style.scss";
 
-// const unitsMap = ['minutes', 'seconds'];
 
-let countDown
+// const units = ['minutes', 'seconds'];
+
+let countDown;
+let timeValuesArr;
+
 
 class Counter extends React.Component {
 
     constructor() {
         super();
 
+        const times = [
+            {
+                unit: 'Minutes',
+                value: 0
+            },
+            {
+                unit: 'Seconds',
+                value: 6
+            }
+        ];
+
         this.state = {
-            seconds: 4,
-            minutes: 0
-        };
+            times
+        }
 
         this.handleStartCount = this.handleStartCount.bind(this)
     }
 
-    handleIncreaseSeconds = () => {
-        this.setState((prevState, props) => ({
-            seconds: ++prevState.seconds
+    handleOperator = (timeUnit, valueIndex, operator) => {
+
+
+        timeValuesArr = this.state.times.map((value) => {
+            return value = value;
+        });
+
+        timeValuesArr[valueIndex].value = operator === 'add' ? ++timeValuesArr[valueIndex].value : --timeValuesArr[valueIndex].value;
+
+        this.setState(() => ({
+            times: timeValuesArr
         }));
+
     };
 
-    handleDecreaseSeconds = () => {
-        this.setState((prevState, props) => ({
-            seconds: --prevState.seconds
-        }));
-    };
+    handleChange = (timeUnit, valueIndex, event) => {
 
-    handleChangeSeconds = (event) => {
+        timeValuesArr = this.state.times.map((value) => {
+            return value = value;
+        });
+
+        timeValuesArr[valueIndex].value = event.target.value;
+
         this.setState({
-            seconds: this.state.seconds = event.target.value
+            times: timeValuesArr
         });
     };
 
-    handleIncreaseMinutes = () => {
-        this.setState((prevState, props) => ({
-            minutes: ++prevState.minutes
-        }));
-    };
+    // handleChangeSeconds = (event) => {
+    //     this.setState({
+    //         seconds: this.state.seconds = event.target.value
+    //     });
+    // };
 
-    handleDecreaseMinutes = () => {
-        this.setState((prevState, props) => ({
-            minutes: --prevState.minutes
-        }));
-    };
-
-    handleChangeMinutes = (event) => {
-        this.setState({
-            minutes: this.state.minutes = event.target.value
-        });
-    };
+    // handleChangeMinutes = (event) => {
+    //     this.setState({
+    //         minutes: this.state.minutes = event.target.value
+    //     });
+    // };
 
 
 
@@ -94,19 +111,15 @@ class Counter extends React.Component {
         return (
             <div className="counter-wrapper">
 
-            <TimeUnit
-            key={1}
-            unit={this.state.minutes}
-            addTime={this.handleIncreaseMinutes}
-            subTime={this.handleDecreaseMinutes}
-            editTime={this.handleChangeMinutes} />
-
-            <TimeUnit
-            key={0}
-            unit={this.state.seconds}
-            addTime={this.handleIncreaseSeconds}
-            subTime={this.handleDecreaseSeconds}
-            editTime={this.handleChangeSeconds} />
+            {this.state.times.map((time, i) => (
+                <TimeUnit
+                key={time.unit}
+                unit={time.value}
+                addTime={() => this.handleOperator(time.unit, i, 'add')}
+                subTime={() => this.handleOperator(time.unit, i, 'sub')}
+                changeTime={() => this.handleChange(time.unit, i)}
+                />
+            ))}
 
             <button onClick={this.handleStartCount}>Start</button>
             

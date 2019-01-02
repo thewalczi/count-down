@@ -53,7 +53,7 @@ class TimeUnit extends React.Component {
         return (
             <div className="unit">
                 <button className="plus" onClick={this.props.addTime}>+</button>
-                <input type="number" className="unit-counter counter" onChange={this.props.editTime} value={ this.props.unit } />
+                <input type="number" className="unit-counter counter" onChange={this.props.changeTime} value={ this.props.unit } />
                 <button className="minus" onClick={this.props.subTime}>-</button>
             </div>
         );
