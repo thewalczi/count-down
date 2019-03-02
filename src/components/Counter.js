@@ -1,7 +1,7 @@
-import React from "react";
-import ReactDOM from "react-dom";
+import React, {Component} from "react";
+
 import TimeUnit from "./TimeUnit";
-// import ActionButton from "./ActionButton";
+import ActionButton from "./ActionButton";
 import style from "../css/style.scss";
 
 
@@ -9,9 +9,11 @@ import style from "../css/style.scss";
 
 let countDown;
 let timeValuesArr;
+let seconds;
+let minutes;
+let copyArr;
 
-
-class Counter extends React.Component {
+class Counter extends Component {
 
     constructor() {
         super();
@@ -19,27 +21,35 @@ class Counter extends React.Component {
         const times = [
             {
                 unit: 'Minutes',
-                value: 0
+                value: 1
             },
             {
                 unit: 'Seconds',
-                value: 6
+                value: 3
             }
         ];
 
         this.state = {
-            times
+            times,
+            appState: 'set'
         }
 
-        this.handleStartCount = this.handleStartCount.bind(this)
     }
 
-    handleOperator = (timeUnit, valueIndex, operator) => {
 
+    //Functions
+    //---------------------------
 
+    copyArr = () => {
         timeValuesArr = this.state.times.map((value) => {
             return value = value;
         });
+    };
+
+    handleOperator = (valueIndex, operator) => {
+
+
+        this.copyArr();
 
         timeValuesArr[valueIndex].value = operator === 'add' ? ++timeValuesArr[valueIndex].value : --timeValuesArr[valueIndex].value;
 
@@ -49,85 +59,100 @@ class Counter extends React.Component {
 
     };
 
-    handleChange = (timeUnit, valueIndex, event) => {
+    handleChange = (valueIndex, event) => {
 
-        timeValuesArr = this.state.times.map((value) => {
-            return value = value;
-        });
+        this.copyArr();
 
-        timeValuesArr[valueIndex].value = event.target.value;
+        timeValuesArr[valueIndex].value = event;
 
         this.setState({
             times: timeValuesArr
         });
     };
 
-    // handleChangeSeconds = (event) => {
-    //     this.setState({
-    //         seconds: this.state.seconds = event.target.value
-    //     });
-    // };
-
-    // handleChangeMinutes = (event) => {
-    //     this.setState({
-    //         minutes: this.state.minutes = event.target.value
-    //     });
-    // };
-
+    appStateChange = (state) => {
+        this.setState({
+            appState: state
+        })
+        console.log(state);
+    } 
 
 
     handleStartCount = () => {
-        countDown = setInterval(function() {
-            if (this.state.minutes >= 0) {
-                this.setState({
-                    seconds: --this.state.seconds
-                });
 
+        this.copyArr();
+
+        countDown = setInterval(function() {
+
+            if (this.state.times[0].value == 0 && this.state.times[1].value == 0) {
+                clearInterval(countDown);
+                // alert('end');
+                this.appStateChange('end');
+            } else {
+                timeValuesArr[1].value = --timeValuesArr[1].value
+
+                this.setState({
+                    times: timeValuesArr
+                });
             }
         }.bind(this), 1000);
-    }
+
+        this.appStateChange('run');
+    };
+
+
+    //Lifecycle methods
+    //------------------------------
 
     componentDidUpdate() {
 
-        if (this.state.seconds < 0 && this.state.minutes >= 0) {
-            this.setState({
-                seconds: 59,
-                minutes: --this.state.minutes
-            });
-        } else if (this.state.seconds > 59) {
-            this.setState({
-                seconds: 0
-            });
+        seconds = this.state.times[1].value;
+        minutes = this.state.times[0].value;
 
-        } else if (this.state.minutes == 0 && this.state.seconds <= 0) {
-            clearInterval(countDown);
-            alert('end');
+        this.copyArr();
+
+        if (seconds < 0 && minutes >= 0) {
+
+            timeValuesArr[1].value = 59;
+            timeValuesArr[0].value = --timeValuesArr[0].value;
+
+            this.setState({
+                times: timeValuesArr
+            });
+        } else if (seconds > 59) {
+
+            timeValuesArr[1].value = 0;
+
+            this.setState({
+                times: timeValuesArr
+            });
         }
     }
 
 
     render() {
+        let wrapperClassNames = ["counter-wrapper " + this.state.appState];
 
         return (
-            <div className="counter-wrapper">
+            <div className={wrapperClassNames}>
 
-            {this.state.times.map((time, i) => (
-                <TimeUnit
-                key={time.unit}
-                unit={time.value}
-                addTime={() => this.handleOperator(time.unit, i, 'add')}
-                subTime={() => this.handleOperator(time.unit, i, 'sub')}
-                changeTime={() => this.handleChange(time.unit, i)}
-                />
-            ))}
-
-            <button onClick={this.handleStartCount}>Start</button>
-            
+                {this.state.times.map((time, index) => (
+                    <TimeUnit
+                    key={time.unit}
+                    time={time.value}
+                    addTime={() => this.handleOperator(index, 'add')}
+                    subTime={() => this.handleOperator(index, 'sub')}
+                    changeTime={event => this.handleChange(index, event.target.value)}
+                    />
+                ))}
+                <ActionButton appState={this.state.appState} startCount={this.handleStartCount}/>
+                
             </div>
         );
     }
 }
 
-ReactDOM.render(<Counter />, document.getElementById('app'));
-
 export default Counter;
+
+
+

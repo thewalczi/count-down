@@ -5,7 +5,6 @@ html, body {
 }
 
 body {
-	background: #0099ff;
 	margin: 0;
 	padding: 0;
 }
@@ -13,15 +12,29 @@ body {
 #app {
 	position: relative;
 	height: 100%;
+	width: 100%;
+	// background: #0099ff;
 }
 
 .counter-wrapper {
 	width: auto;
-	height: 250px;
+	height: 100%;
 	display: flex;
 	justify-content: center;
 	align-items: center;
+	transition: background 1s;
+
+	&.set {
+		background: #0099ff;
+	}
+	&.run {
+		background: #bd4700;
+	}
+	&.end {
+		background: #00bd81;
+	}
 }
+
 
 .unit {
 	width: 50px;
