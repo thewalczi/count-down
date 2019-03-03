@@ -43,6 +43,9 @@ class Counter extends Component {
         console.log(state);
     } 
 
+    //State handlers
+    //--------------------------------
+    
     handleStartCounter = () => {
 
         countDown = setInterval(function() {
@@ -63,6 +66,10 @@ class Counter extends Component {
     handlePauseCounter = () => {
         clearInterval(countDown);
         this.appStateChange('pause');
+    };
+
+    handleSetCounter = () => {
+        this.appStateChange('set');
     };
 
     //Lifecycle methods
@@ -91,8 +98,8 @@ class Counter extends Component {
         return (
             <div className={wrapperClassNames}>
 
-                <TimeUnit changeTime={this.handleChange} handleUnit={this.handleUnit} minutes={this.state.minutes} seconds={this.state.seconds} />
-                <ActionButton appState={this.state.appState} startCounter={this.handleStartCounter} pauseCounter={this.handlePauseCounter}/>
+                <TimeUnit changeTime={this.handleChange} appState={this.state.appState} handleUnit={this.handleUnit} minutes={this.state.minutes} seconds={this.state.seconds} />
+                <ActionButton appState={this.state.appState} startCounter={this.handleStartCounter} pauseCounter={this.handlePauseCounter} setCounter={this.handleSetCounter}/>
                 
             </div>
         );
@@ -116,7 +123,28 @@ export default Counter;
 
 3. Counter is starting even when value is 00:00. Prevent that with some warning. "You cannot get water out of a stone. Please provide some value to start the counter"
 
-4. Add and Sub buttons are available in all states. Should be available only in 'set' state.
+4. **RESOLVED** Add and Sub buttons are available in all states. Should be available only in 'set' state.  
 
+
+*/
+
+
+//IMPROVEMENTS
+//------------------
+
+/*
+1. Message when count is done.
+
+2. Message when error occurs.
+
+3. Error handling
+
+4. Styling for buttons
+
+5. Engine for Pomodoro (Settingtime for focus and for breaks, Browser tab focused when counting is over)
+
+6. Tabs on top (for regular timer and pomodoro)
+
+7. Side info
 
 */

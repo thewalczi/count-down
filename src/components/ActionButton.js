@@ -17,11 +17,16 @@ class ActionButton extends Component {
         };
 
         const AppOnPause = () => {
-            return <button onClick={this.props.startCounter}>Resume</button>
+            return (
+                <React.Fragment>
+                    <button onClick={this.props.startCounter}>Resume</button>
+                    <button onClick={this.props.setCounter}>Set time</button>
+                </React.Fragment>
+            )
         }
     
         const AppOnEnd = () => {
-            return <button>Set time</button>
+            return <button onClick={this.props.setCounter}>Set time</button>
         };
 
         if(this.props.appState === 'set'){

@@ -45,8 +45,8 @@ body {
 	flex: 0 0 auto;
 	padding: 0 5px;
 
-	.plus,
-	.minus {
+	.add,
+	.sub {
 		width: 100%;
 		height: 30px;
 		color: #fff;
@@ -55,12 +55,16 @@ body {
 		background: none;
 		font-weight: bold;
 		cursor: pointer;
-		font-size: 20px;
+		font-size: 24px;
 		vertical-align: middle;
+
+		&[disabled] {
+			display: none;
+		}
 	}
 	&:hover {
-		& .plus,
-		& .minus {
+		& .add,
+		& .sub {
 			opacity: 0.6;
 		}
 	}
