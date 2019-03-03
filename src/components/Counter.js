@@ -5,68 +5,34 @@ import ActionButton from "./ActionButton";
 import style from "../css/style.scss";
 
 
-// const units = ['minutes', 'seconds'];
-
 let countDown;
-let timeValuesArr;
-let seconds;
-let minutes;
-let copyArr;
 
 class Counter extends Component {
 
     constructor() {
         super();
 
-        const times = [
-            {
-                unit: 'Minutes',
-                value: 1
-            },
-            {
-                unit: 'Seconds',
-                value: 3
-            }
-        ];
-
         this.state = {
-            times,
+            minutes: 0,
+            seconds: 5,
             appState: 'set'
         }
 
     }
 
-
     //Functions
     //---------------------------
 
-    copyArr = () => {
-        timeValuesArr = this.state.times.map((value) => {
-            return value = value;
-        });
-    };
-
-    handleOperator = (valueIndex, operator) => {
-
-
-        this.copyArr();
-
-        timeValuesArr[valueIndex].value = operator === 'add' ? ++timeValuesArr[valueIndex].value : --timeValuesArr[valueIndex].value;
-
-        this.setState(() => ({
-            times: timeValuesArr
-        }));
-
-    };
-
-    handleChange = (valueIndex, event) => {
-
-        this.copyArr();
-
-        timeValuesArr[valueIndex].value = event;
-
+    handleUnit = (action, unit) => {
+        let operator =  (action == 'add' ? ++this.state[unit] : --this.state[unit])
         this.setState({
-            times: timeValuesArr
+            [unit]: operator
+        })
+    }
+
+    handleChange = (unit, event) => {
+        this.setState({
+            [unit]: event
         });
     };
 
@@ -77,22 +43,16 @@ class Counter extends Component {
         console.log(state);
     } 
 
-
-    handleStartCount = () => {
-
-        this.copyArr();
+    handleStartCounter = () => {
 
         countDown = setInterval(function() {
 
-            if (this.state.times[0].value == 0 && this.state.times[1].value == 0) {
+            if (this.state.minutes == 0 && this.state.seconds == 0) {
                 clearInterval(countDown);
-                // alert('end');
                 this.appStateChange('end');
             } else {
-                timeValuesArr[1].value = --timeValuesArr[1].value
-
                 this.setState({
-                    times: timeValuesArr
+                    seconds: --this.state.seconds
                 });
             }
         }.bind(this), 1000);
@@ -100,35 +60,30 @@ class Counter extends Component {
         this.appStateChange('run');
     };
 
+    handlePauseCounter = () => {
+        clearInterval(countDown);
+        this.appStateChange('pause');
+    };
 
     //Lifecycle methods
     //------------------------------
 
     componentDidUpdate() {
 
-        seconds = this.state.times[1].value;
-        minutes = this.state.times[0].value;
-
-        this.copyArr();
-
-        if (seconds < 0 && minutes >= 0) {
-
-            timeValuesArr[1].value = 59;
-            timeValuesArr[0].value = --timeValuesArr[0].value;
+        if (this.state.seconds < 0 && this.state.minutes >= 0) {
 
             this.setState({
-                times: timeValuesArr
-            });
-        } else if (seconds > 59) {
+                seconds: 59,
+                minutes: --this.state.minutes
+            })
 
-            timeValuesArr[1].value = 0;
+        } else if (this.state.seconds > 59) {
 
             this.setState({
-                times: timeValuesArr
+                seconds: 0
             });
         }
     }
-
 
     render() {
         let wrapperClassNames = ["counter-wrapper " + this.state.appState];
@@ -136,16 +91,8 @@ class Counter extends Component {
         return (
             <div className={wrapperClassNames}>
 
-                {this.state.times.map((time, index) => (
-                    <TimeUnit
-                    key={time.unit}
-                    time={time.value}
-                    addTime={() => this.handleOperator(index, 'add')}
-                    subTime={() => this.handleOperator(index, 'sub')}
-                    changeTime={event => this.handleChange(index, event.target.value)}
-                    />
-                ))}
-                <ActionButton appState={this.state.appState} startCount={this.handleStartCount}/>
+                <TimeUnit changeTime={this.handleChange} handleUnit={this.handleUnit} minutes={this.state.minutes} seconds={this.state.seconds} />
+                <ActionButton appState={this.state.appState} startCounter={this.handleStartCounter} pauseCounter={this.handlePauseCounter}/>
                 
             </div>
         );
@@ -156,3 +103,20 @@ export default Counter;
 
 
 
+
+
+
+//KNOWN BUGS
+//------------------
+
+/*
+1. Minutes value can be negative
+
+2. Minutes value can be more than 999. Causing that the value is not fully displayed in the field.
+
+3. Counter is starting even when value is 00:00. Prevent that with some warning. "You cannot get water out of a stone. Please provide some value to start the counter"
+
+4. Add and Sub buttons are available in all states. Should be available only in 'set' state.
+
+
+*/

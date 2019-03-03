@@ -9,12 +9,16 @@ class ActionButton extends Component {
         let button;
 
         const AppOnSet = () => {
-            return <button onClick={this.props.startCount}>Start</button>
+            return <button onClick={this.props.startCounter}>Start</button>
         };
     
         const AppOnRun = () => {
-            return <button>Pause</button>
+            return <button onClick={this.props.pauseCounter}>Pause</button>
         };
+
+        const AppOnPause = () => {
+            return <button onClick={this.props.startCounter}>Resume</button>
+        }
     
         const AppOnEnd = () => {
             return <button>Set time</button>
@@ -23,9 +27,15 @@ class ActionButton extends Component {
         if(this.props.appState === 'set'){
             button = <AppOnSet />
         }
+        
         else if (this.props.appState === 'run'){
             button = <AppOnRun />
         }
+
+        else if (this.props.appState === 'pause'){
+            button = <AppOnPause />
+        }
+        
         else if (this.props.appState === 'end'){
             button = <AppOnEnd />
         }
