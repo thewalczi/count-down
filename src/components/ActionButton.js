@@ -9,24 +9,24 @@ class ActionButton extends Component {
         let button;
 
         const AppOnSet = () => {
-            return <button onClick={this.props.startCounter}>Start</button>
+            return <button className="button-start" onClick={this.props.startCounter}></button>
         };
     
         const AppOnRun = () => {
-            return <button onClick={this.props.pauseCounter}>Pause</button>
+            return <button className="button-pause" onClick={this.props.pauseCounter}></button>
         };
 
         const AppOnPause = () => {
             return (
                 <React.Fragment>
-                    <button onClick={this.props.startCounter}>Resume</button>
-                    <button onClick={this.props.setCounter}>Set time</button>
+                    <button className="button-start" onClick={this.props.startCounter}></button>
+                    <button className="button-set" onClick={this.props.setCounter}></button>
                 </React.Fragment>
             )
         }
     
         const AppOnEnd = () => {
-            return <button onClick={this.props.setCounter}>Set time</button>
+            return <button className="button-set" onClick={this.props.setCounter}></button>
         };
 
         if(this.props.appState === 'set'){
