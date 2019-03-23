@@ -26,7 +26,7 @@ class Message extends Component {
         let sublabel = "Please provide some value and start the counter.";
 
         return (
-            <div class="modal__text">
+            <div className="modal__text">
                 <h3 className="modal__text--label">{label}</h3>
                 <p className="modal__text--sublabel">{sublabel}</p>
             </div>

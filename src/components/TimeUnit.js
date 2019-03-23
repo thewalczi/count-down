@@ -4,6 +4,7 @@ import PropTypes from "prop-types";
 
 class TimeUnit extends Component {
 
+
     render() {
 
         const Button = (unit, operator) => {
@@ -24,7 +25,8 @@ class TimeUnit extends Component {
                     <input 
                         type="number" 
                         className="unit-counter counter" 
-                        onChange={() => this.props.changeTime('minutes', event.target.value)} 
+                        onChange={() => this.props.changeTime('minutes', event.target.value)}
+                        onBlur={() => this.props.ifEmpty('minutes')}
                         value={ this.props.minutes } 
                         disabled={this.props.appState !== 'set'}
                     />
@@ -36,6 +38,7 @@ class TimeUnit extends Component {
                         type="number"
                         className="unit-counter counter"
                         onChange={() => this.props.changeTime('seconds', event.target.value)}
+                        onBlur={() => this.props.ifEmpty('seconds')}
                         value={ this.props.seconds }
                         disabled={this.props.appState !== 'set'}
                     />

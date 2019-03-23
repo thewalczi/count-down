@@ -33,10 +33,19 @@ class Counter extends Component {
     }
 
     handleChange = (unit, event) => {
-        this.setState({
-            [unit]: event
-        });
+            this.setState({
+                [unit]: parseInt(event)  //parsing string into a number after manually change the value in counter
+            });
     };
+
+    handleBlur = (unit) => {  //Checking if the value is NaN (empty) and setting there 0
+        if(Number.isNaN(this.state[unit])) {
+            this.setState({
+                [unit]: 0
+            })
+            console.log(this.state[unit]);
+        }
+    } 
 
     appStateChange = (state) => {
         this.setState({
@@ -61,7 +70,7 @@ class Counter extends Component {
     //--------------------------------
     
     handleStartCounter = () => {
-        if (this.state.minutes === 0 && this.state.seconds === 0){
+        if (this.state.minutes === 0 && this.state.seconds === 0 && this.state.appState === 'set'){
             {this.showModal()}
             // alert("value can't be empty");
             console.log(this.state.show);
@@ -124,7 +133,7 @@ class Counter extends Component {
         return (
             <div className={wrapperClassNames}>
                 <div className="counter-container">
-                    <TimeUnit changeTime={this.handleChange} appState={this.state.appState} handleUnit={this.handleUnit} minutes={this.state.minutes} seconds={this.state.seconds} />      
+                    <TimeUnit changeTime={this.handleChange} ifEmpty={this.handleBlur} appState={this.state.appState} handleUnit={this.handleUnit} minutes={this.state.minutes} seconds={this.state.seconds} />      
                 </div>
                 <ActionButton appState={this.state.appState} startCounter={this.handleStartCounter} pauseCounter={this.handlePauseCounter} setCounter={this.handleSetCounter}/>
                 <Modal show={this.state.show} handleClose={this.hideModal}/>
@@ -152,7 +161,9 @@ export default Counter;
 
 4. **RESOLVED** Add and Sub buttons are available in all states. Should be available only in 'set' state. 
 
-5. Value after manually removing can be empty.
+5. **RESOLVED** Value after manually removing can be empty.
+
+6. **RESOLVED** When value were paused at 0:0 and the run back - the modal appears.
 
 
 */
