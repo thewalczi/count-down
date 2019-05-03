@@ -10,42 +10,43 @@ class TimeUnit extends Component {
         const Button = (unit, operator) => {
             let sign = operator === 'add' ? '+' : '-';
             
-            return <button
-                className={operator}
-                onClick={() => this.props.handleUnit(operator, unit)}
-                disabled={this.props.appState !== 'set'}>
-                {sign}
-            </button>
+            return (
+                <button
+                    className={operator}
+                    onClick={() => this.props.handleUnit(operator, unit)}
+                    disabled={this.props.appState !== 'set'}>
+                    {sign}
+                </button>
+            )
+        }
+
+        const Input = (unit) => {
+            return (
+                <input 
+                    type="number" 
+                    className="unit-counter counter" 
+                    onChange={() => this.props.changeTime(unit, event.target.value)}
+                    onBlur={() => this.props.ifEmpty(unit)}
+                    value={ this.props[unit] } 
+                    disabled={this.props.appState !== 'set'}
+                />
+            )
         }
 
         return (
             <React.Fragment>
                <div className="unit unit-minutes">
                     {Button('minutes', 'add')}
-                    <input 
-                        type="number" 
-                        className="unit-counter counter" 
-                        onChange={() => this.props.changeTime('minutes', event.target.value)}
-                        onBlur={() => this.props.ifEmpty('minutes')}
-                        value={ this.props.minutes } 
-                        disabled={this.props.appState !== 'set'}
-                    />
+                    {Input('minutes')}
                     {Button('minutes', 'sub')}
                 </div>
                 <div className="unit unit-seconds">
                     {Button('seconds', 'add')}
-                    <input
-                        type="number"
-                        className="unit-counter counter"
-                        onChange={() => this.props.changeTime('seconds', event.target.value)}
-                        onBlur={() => this.props.ifEmpty('seconds')}
-                        value={ this.props.seconds }
-                        disabled={this.props.appState !== 'set'}
-                    />
+                    {Input('seconds')}
                     {Button('seconds', 'sub')}
                 </div>
             </React.Fragment>
-        );
+        )
     }
 }
 

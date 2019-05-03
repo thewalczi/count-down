@@ -33,9 +33,11 @@ class Counter extends Component {
     }
 
     handleChange = (unit, event) => {
+        // if(event >= 99){
             this.setState({
                 [unit]: parseInt(event)  //parsing string into a number after manually change the value in counter
             });
+        // }
     };
 
     handleBlur = (unit) => {  //Checking if the value is NaN (empty) and setting there 0
@@ -124,6 +126,10 @@ class Counter extends Component {
             this.setState({
                 minutes: 0
             })
+        } else if (this.state.minutes > 99) {
+            this.setState({
+                minutes: 99
+            })
         }
     }
 
@@ -155,7 +161,7 @@ export default Counter;
 /*
 1. **RESOLVED** Minutes value can be negative
 
-2. Minutes value can be more than 999. Causing that the value is not fully displayed in the field.
+2. **RESOLVED** Minutes value can be more than 999. Causing that the value is not fully displayed in the field.
 
 3. **RESOLVED** Counter is starting even when value is 00:00. Prevent that with some warning. "You cannot get water out of a stone. Please provide some value to start the counter"
 
@@ -177,14 +183,22 @@ export default Counter;
 
 2. Message when error occurs.
 
-3. Error handling
+4. Message when trying to get less than 0 minutes.
 
-4. **DONE** Styling for buttons
+5. Error handling
 
-5. Engine for Pomodoro (Settingtime for focus and for breaks, Browser tab focused when counting is over)
+6. **DONE** Styling for buttons
 
-6. Tabs on top (for regular timer and pomodoro)
+7. Engine for Pomodoro (Settingtime for focus and for breaks, Browser tab focused when counting is over)
 
-7. Side info
+8. Tabs on top (for regular timer and pomodoro)
+
+9. Side info
+
+10. **DONE** Optimize code in TimeUnit.js (create one reusable chunk of code)
+
+11. Prettier design 
+
+12. Radial progress bar
 
 */
