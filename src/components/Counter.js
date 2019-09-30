@@ -5,7 +5,6 @@ import ActionButton from "./ActionButton";
 import Modal from "./Modal";
 import style from "../css/style.scss";
 
-
 let countDown;
 
 class Counter extends Component {
@@ -17,7 +16,8 @@ class Counter extends Component {
             minutes: 0,
             seconds: 0,
             appState: 'set',
-            show: false
+            show: false,
+            val: 1
         }
 
     }
@@ -91,6 +91,12 @@ class Counter extends Component {
 
             this.appStateChange('run');
         }
+
+        if (this.state.appState === 'set'){
+            this.setState({
+                val: (this.state.minutes * 60 + this.state.seconds)
+            });
+        }
     };
 
     handlePauseCounter = () => {
@@ -100,13 +106,60 @@ class Counter extends Component {
 
     handleSetCounter = () => {
         this.appStateChange('set');
+        this.setState({
+                val: (this.state.minutes * 60 + this.state.seconds)
+            });
     };
+
+    fillWithZero = unit => {
+        // let unitInput = document.querySelector(`.unit-${unit} > .unit-counter`);
+        // if (this.state[unit] < 10) {
+            // return unitInput.insertBefore('0');
+
+            let valWithZero = (`0${this.state[unit]}`).slice(-2);
+            // let convertToNum = parseInt(valWithZero);
+            
+            // this.setState({
+            //     [unit]: convertToNum
+            // });
+            console.log(valWithZero)
+            // console.log(convertToNum)
+        }
+    
+
+    progressBar = (canvas) => {  //Radial progressbar
+        return {
+            ctx: document.getElementById(canvas).getContext('2d'),
+            display: function (p) {
+                this.ctx.strokeStyle = 'white';  //path color
+                this.ctx.lineWidth = 5; // path width
+                this.ctx.fillRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+                this.ctx.clearRect(0, 0, this.ctx.canvas.width, this.ctx.canvas.height);
+
+                let center = this.ctx.canvas.width / 2;
+                //circle as progress bar
+                this.ctx.beginPath();
+                this.ctx.globalAlpha = 0.7;  //path transparency
+                this.ctx.arc(center, center, center * 0.9, 0 * Math.PI, (p * 2 * Math.PI)); // x, y, z ...
+                this.ctx.stroke();
+                //Static circle in background
+                this.ctx.beginPath();
+                this.ctx.globalAlpha = 0.2;  //path transparency
+                this.ctx.arc(center, center, center * 0.9, 0, 2 * Math.PI);
+                this.ctx.stroke();   
+            }
+		}	
+	}
+    
 
     //Lifecycle methods
     //------------------------------
 
-    componentDidUpdate() {
+    componentDidMount() {
+        this.progressBar('progress-bar').display(1);  // initial render of progress bar     //change to useEffect Hooks
+    }
 
+    componentWillUpdate() {
         if (this.state.seconds < 0 && this.state.minutes >= 0) {
 
             this.setState({
@@ -131,18 +184,44 @@ class Counter extends Component {
                 minutes: 99
             })
         }
+
+        // this.fillWithZero('minutes');
     }
+    
+    componentDidUpdate() {
+        let int = (this.state.minutes * 60 + this.state.seconds) / this.state.val; //change to useEffect Hooks
+        this.progressBar('progress-bar').display(int);
+    }
+
 
     render() {
         let wrapperClassNames = [`counter-wrapper counter-${this.state.appState}`];
 
         return (
             <div className={wrapperClassNames}>
+                <canvas height="400" width="400" id="progress-bar"></canvas>
                 <div className="counter-container">
-                    <TimeUnit changeTime={this.handleChange} ifEmpty={this.handleBlur} appState={this.state.appState} handleUnit={this.handleUnit} minutes={this.state.minutes} seconds={this.state.seconds} />      
+                    <div className="counter-units">
+                        <TimeUnit 
+                            changeTime={this.handleChange} 
+                            ifEmpty={this.handleBlur} 
+                            appState={this.state.appState} 
+                            handleUnit={this.handleUnit} 
+                            minutes={this.state.minutes} 
+                            seconds={this.state.seconds}
+                        />
+                    </div>
+                    <ActionButton
+                        appState={this.state.appState}
+                        startCounter={this.handleStartCounter}
+                        pauseCounter={this.handlePauseCounter}
+                        setCounter={this.handleSetCounter}
+                    />
                 </div>
-                <ActionButton appState={this.state.appState} startCounter={this.handleStartCounter} pauseCounter={this.handlePauseCounter} setCounter={this.handleSetCounter}/>
-                <Modal show={this.state.show} handleClose={this.hideModal}/>
+                <Modal
+                    show={this.state.show}
+                    handleClose={this.hideModal}
+                />
             </div>
         );
     }
@@ -197,8 +276,8 @@ export default Counter;
 
 10. **DONE** Optimize code in TimeUnit.js (create one reusable chunk of code)
 
-11. Prettier design 
+11. Prettier design (mm) : (ss)
 
-12. Radial progress bar
+12. **DONE** Radial progress bar
 
 */

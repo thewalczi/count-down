@@ -40,6 +40,7 @@ class TimeUnit extends Component {
                     {Input('minutes')}
                     {Button('minutes', 'sub')}
                 </div>
+                <div className="counter-semicolon">:</div>
                 <div className="unit unit-seconds">
                     {Button('seconds', 'add')}
                     {Input('seconds')}
